@@ -43,16 +43,15 @@ Wall_Strength = 1.5;
 // Height used for the wall of the bottle holder
 Wall_Height = 15;
 
-/*[Row and Column Settings]*/
+/*[Column Settings]*/
 // Number of [bottles] per [row]
 Num_of_Columns = 5;
 // Space between [bottles] in a [row]. May be negative but only by [real space
 // between bottle holders] + 1 * [Wall Strength]
 Space_between_Columns = 1;
-// Number of [rows]
-Num_of_Rows = 1;
-// Height between Levels
-Height_between_Levels = 10;
+
+
+
 
 //////////////////////////////
 // !!! No changes below !!! //
@@ -234,4 +233,5 @@ module SingleBrickInlay() {
 /////////////
 // Program //
 /////////////
-SolidHolder();
+SolidHolder();  
+
