@@ -21,17 +21,27 @@ BrickWidth = 4;
 // [Depth] (Y-Coordinate) of the brick in brick units. Must be positive, not decimal, not zero value.
 BrickDepth = 4;
 // [HeightLayers used for the Base] before adding the angle. Must be positive, not decimal, not zero value.
-HeightLayers=1;
+HeightLayers = 1;
 
-Angle=30;
-Base(BrickWidth,BrickDepth, HeightLayers,true);
+Angle = 40;
 
-bla= CalcTanslationAfterRotation(SmallHeight_of_a_Brick * HeightLayers,Angle);
-echo(bla);
-translate(bla)
-rotate([Angle,0,0])
-Base(BrickWidth,BrickDepth, HeightLayers,true);
+_origin_x = GetSizeByBrickUnits(BrickWidth, Size_of_a_BrickUnit);
+_origin_z = SmallHeight_of_a_Brick * HeightLayers;
+echo(_origin_x);
+echo(_origin_z);
 
-/*rotate([0,45,0]) 
+correctedPosition = CalcTanslationAfterRotation([0,0,_origin_z], Angle);
+newEnd= CalcPositionAfterRotation([0,_origin_x,_origin_z], Angle) + correctedPosition ;
+echo(correctedPosition);
+echo(newEnd);
+translate(newEnd) 
+color("red",1) 
+    cube(1);
 
-    Base(BrickWidth,BrickDepth, HeightLayers,true);*/
+color("yellow",0.5) 
+Base(BrickWidth,BrickDepth, HeightLayers,false);
+translate([1,0,0]) 
+translate(correctedPosition)
+    rotate([Angle,0,0])
+    color("green",1) 
+        Base(BrickWidth,BrickDepth, HeightLayers,true);
