@@ -1,0 +1,301 @@
+///////////////////////////////////////////////////////////////
+// Part of the "Brick compatible color shelf" (BCCS) project //
+// File: 01_ColorHolder.scad                                 //
+//                                                           //
+// By: Alexander Szymanski / 18thAngel                       //
+///////////////////////////////////////////////////////////////
+
+include <xx_Constants.scad>
+include <xx_SharedStuff.scad>
+
+
+/*[Explaination]*/
+// All values regarding sizes, are in [mm] as long as nothing else is stated. The [value] of this does not matter in any possible way, it's just for displaying this text!
+Note_on_sizes = 1;
+
+/*[General Settings]*/
+// Used for fast rendering
+Num_Of_Fragments_DebugMode=12;
+
+// Used for print version
+Num_Of_Fragments_ProductMode=72;
+
+// Allways ceil to even number of Brick Units
+Even_number_of_BrickUnits = true;
+
+/*[Validation Settings]*/
+// Check if parameters are plausible
+Do_Validation = true;
+
+// Check if parameters match printer settings
+Do_3D_Printer_Validation = true;
+
+// Used for validation, as values that are related to height, should be match
+Planned_3D_Layer_Height = 0.4;
+
+// Width of 3d printer bed
+Width_of_3d_printer_bed = 210;
+
+// Depth of 3d printer bed
+Depth_of_3d_printer_bed = 210;
+
+// Max Printable Hight 
+Max_Printable_Hight = 200;
+
+
+
+/*[Single Bottle Holder Settings]*/
+// Diameter of a bottle
+Bottle_Diameter = 27;
+//30mm tattoobottle
+//35mm NoName
+//37mm Idee
+//25mm valjero
+
+// Strength for the walls of the bottle holder
+Wall_Strength = 1.5;
+// Height for the walls of the bottle holder
+Wall_Height = 15;
+
+/*[Tile Settings]*/
+// Size that is used for [Length:X] and [Depth:Y] of the tile
+Size_of_Tile = Bottle_Diameter + 2 * Wall_Strength;
+// Thickness used for the [Thickness:Z] of the tile base
+//Thickness_of_tile_base = 2.1;
+Thickness_of_tile_base = SmallHeight_of_a_Brick;
+
+/*[Row and Column Settings]*/
+// Number of [bottles] per [row]
+Num_of_Columns = 5;
+// Space between [bottles] in a [row]. May be negative but only by [real space between bottle holders] + 1 * [Wall Strength]
+Space_between_Columns = 1;
+// Number of [rows]
+Num_of_Rows = 1;
+// Height between Levels
+Height_between_Levels = 10;
+
+
+
+
+//////////////////////////////
+// !!! No changes below !!! //
+//////////////////////////////
+if($preview)
+{
+
+}
+
+
+include <01_Functions.scad>
+///////////////////////
+// Value Calculation //
+///////////////////////
+
+//General
+$fn = $preview ? Num_Of_Fragments_DebugMode : Num_Of_Fragments_ProductMode;
+
+minSpaceBetweenColumns = (Bottle_Diameter + Wall_Strength) - Size_of_Tile;
+
+tileDepth = CalcRealSize(Size_of_Tile,Size_of_a_BrickUnit,Even_number_of_BrickUnits);
+tileDepthOverhead = tileDepth - Size_of_Tile;
+
+
+
+
+
+
+//////////////////////////
+
+///////////////////////
+// Value Calculation //
+///////////////////////
+
+BottleHolder_OutterRadius = Bottle_Diameter / 2 + Wall_Strength;
+BottleHolder_InnerRadius = Bottle_Diameter / 2;
+
+echo(str("BottleHolder_OutterRadius * 2 * Num_of_Columns:",BottleHolder_OutterRadius * 2 * Num_of_Columns));
+echo(str("(Num_of_Columns - 1) * Space_between_Columns:",(Num_of_Columns - 1) * Space_between_Columns));
+
+BaseSizeWidth_tmp = (BottleHolder_OutterRadius * 2 * Num_of_Columns) + ((Num_of_Columns ) * Space_between_Columns);
+echo(str("BaseSizeWidth_tmp:",BaseSizeWidth_tmp));
+BaseSizeWidth = CalcRealSize(BaseSizeWidth_tmp,Size_of_a_BrickUnit,Even_number_of_BrickUnits);
+echo(str("BaseSizeWidth:",BaseSizeWidth));
+
+BaseSizeWidth_overhead = BaseSizeWidth - BaseSizeWidth_tmp;
+echo(str("BaseSizeWidth_overhead:",BaseSizeWidth_overhead));
+
+echo(str("BaseSizeWidth_overhead / NotZero( Num_of_Columns -1):",BaseSizeWidth_overhead /  Num_of_Columns));
+
+CalcedSpaceBetween = Space_between_Columns + (BaseSizeWidth_overhead / NotZero( Num_of_Columns));
+echo(str("CalcedSpaceBetween:",CalcedSpaceBetween));
+
+if($preview)
+{
+  echo(str("The real base width for ",BaseSizeWidth_tmp,"mm has been calced to: ",BaseSizeWidth,"mm"));
+  echo(str("CalcedSpaceBetween has been calced to ",CalcedSpaceBetween,"mm"));
+}
+
+///////////////////////////
+unitsWidth= BaseSizeWidth / Size_of_a_BrickUnit;
+unitsDepth= tileDepth / Size_of_a_BrickUnit;
+///////////////////////////
+
+if($preview)
+{
+  echo("");
+  echo("----------------------------");
+  echo("Messures of a brick:");
+  echo("");
+  
+  echo(str("Small height of a brick: ",SmallHeight_of_a_Brick,"mm (given)"));
+  echo(str("Height of a brick head: ",Height_of_a_BrickHead,"mm (given)"));
+  echo(str("Diameter of a brick head: ",Diameter_of_a_BrickHead,"mm (given)"));
+  echo(str("Height of a brick: ",Height_of_a_Brick,"mm (calc)"));
+  echo(str("Size of a brick unit: ",Size_of_a_BrickUnit,"mm (calc)"));
+  echo(str("Width of a brick:  ",Width_of_a_Brick,"mm (calc)"));
+  echo(str("Radius_of_a_BrickHead:  ",Radius_of_a_BrickHead,"mm (calc)"));
+  echo(str("InnerRadius of a BrickHole:  ",InnerRadius_of_a_BrickHole,"mm (calc)"));
+  echo(str("OutterRadius of a BrickHole:  ",OutterRadius_of_a_BrickHole,"mm (calc)"));
+  echo("");
+  
+  echo("Messures the Holder:");
+  echo("");
+  echo(str("The real tile depth for ",Size_of_Tile,"mm has been calced to: ",tileDepth,"mm"));
+  echo(str("The real base width for ",BaseSizeWidth_tmp,"mm has been calced to: ",BaseSizeWidth,"mm"));
+  echo(str("Tile depth:  ",tileDepth,"mm (calc)")); 
+  echo(str("Tile width:  ",BaseSizeWidth,"mm (calc)")); 
+  echo(str("Tile depth:  ",unitsDepth,"units (calc)")); 
+  echo(str("Tile width:  ",unitsWidth,"units (calc)")); 
+  echo("");
+  echo("----------------------------");
+  echo("");
+  
+  echo(str("The real tile depth for ",Size_of_Tile,"mm has been calced to: ",tileDepth,"mm"));
+}
+
+
+module BottleHolder(){
+  translate([0,BottleHolder_OutterRadius+tileDepthOverhead/2,0]){
+    difference(){
+      cylinder(Wall_Height, BottleHolder_OutterRadius, BottleHolder_OutterRadius);
+      cylinder(Wall_Height+0.1, BottleHolder_InnerRadius, BottleHolder_InnerRadius);
+    }
+  }
+}
+
+module BottleHolders(){
+  for(holder=[0:Num_of_Columns - 1]){
+    translate([ (holder * (BottleHolder_OutterRadius*2 + CalcedSpaceBetween)) + BottleHolder_OutterRadius, 0, Thickness_of_tile_base])
+      BottleHolder();
+  }
+}
+
+module Base() {
+  difference(){
+    cube([BaseSizeWidth,tileDepth,Thickness_of_tile_base]);
+    translate([OutterWallStrength_of_a_Brick,OutterWallStrength_of_a_Brick,-TopWallStrength_of_a_Brick])
+      cube([BaseSizeWidth-2*OutterWallStrength_of_a_Brick,tileDepth-2*OutterWallStrength_of_a_Brick,Thickness_of_tile_base]);
+  }
+  for(row=[1:1:unitsDepth-1])
+  {  
+    for(col=[1:1:unitsWidth-1])
+    {
+      translate([Size_of_a_BrickUnit*col,  Size_of_a_BrickUnit*row,0])
+        SingleBrickInlay();
+    }
+  }
+}
+
+module Brick(){
+  cube([Width_of_a_Brick, Width_of_a_Brick,Height_of_a_Brick]);
+  translate([Width_of_a_Brick/2, Width_of_a_Brick/2,Height_of_a_Brick])
+  cylinder(Height_of_a_BrickHead,Diameter_of_a_BrickHead/2,Diameter_of_a_BrickHead/2);
+  }
+
+module SolidHolder(){
+  Base();
+  translate([CalcedSpaceBetween/2,0,0])
+    BottleHolders();  
+  }
+
+module SingleBrickInlay(){
+  
+  difference()
+  {
+    cylinder(Thickness_of_tile_base-TopWallStrength_of_a_Brick,OutterRadius_of_a_BrickHole,OutterRadius_of_a_BrickHole);
+    cylinder(Thickness_of_tile_base-TopWallStrength_of_a_Brick,InnerRadius_of_a_BrickHole,InnerRadius_of_a_BrickHole);
+  }
+}
+
+/////////////////
+
+
+//Base();
+color("green",.3)
+SolidHolder();
+//SingleBrickInlay();
+
+/*
+difference()
+{  
+SolidHolder();
+for(row=[0:1:unitsDepth-1])
+{  
+  for(col=[0:1:unitsWidth-1])
+  {
+    translate([col * Size_of_a_BrickUnit,row*Size_of_a_BrickUnit,-Height_of_a_Brick])
+      color("green",1)
+        Brick();
+  }
+}
+}
+*/
+
+
+
+/*
+//////////////////////
+// Value Validation //
+//////////////////////
+module GeneralValidation(){
+  echo("Doing General Validation");
+  validationFor_TileSize_2_BottleHolderSize = Size_of_Tile >= (Bottle_Diameter + (2 * Wall_Strength));
+  assert(validationFor_TileSize_2_BottleHolderSize,"[Size of Tile] must be equal or greater than ([Bottle Diameter] + (2 * [Wall Strength])");
+
+  validationFor_Space_between_Columns = Space_between_Columns >= minSpaceBetweenColumns;
+  assert(validationFor_Space_between_Columns,"[Space_between_Columns] must be equal or greater than (([Bottle Diameter] + [Wall Strength]) - [Size of Tile])");
+}
+module PrinterValidation(){
+  if(Do_3D_Printer_Validation){
+      echo("Doing 3D Printer Validation");
+    }
+}
+module Validation(){
+  if(Do_Validation)
+  {
+    GeneralValidation();
+    PrinterValidation();
+  }
+}
+
+Validation();
+*/
+//////////////
+// Includes //
+//////////////
+//include <03_TileRow.scad>
+
+
+
+
+/*
+/////////////
+// Program //
+/////////////
+for(row = [0:Num_of_Rows-1])
+{
+  calcedRowPosition = row * Size_of_Tile;
+  translate([0,calcedRowPosition,0])
+    TileRow(row*Height_between_Levels);
+}
+*/
