@@ -10,51 +10,39 @@ include <xx_SharedStuff.scad>
 
 
 /*[Explaination]*/
-// All values regarding sizes, are in [mm] as long as nothing else is stated. The [value] of this does not matter in any possible way, it's just for displaying this text!
+//The [value] of this parameter are ignored and are just for displaying this Lines!!!
+//The [value] of this parameter are ignored and are just for displaying this Lines!!!
+Note_on_notes = 1;
+// All values regarding sizes, are in [mm] as long as nothing else is stated.
 Note_on_sizes = 1;
 
 /*[General Settings]*/
 // Used for fast rendering
 Num_Of_Fragments_DebugMode=12;
 
-// Used for print version
+// Used for print version, more fragments resolve in LONGER rendering time but smother curves
 Num_Of_Fragments_ProductMode=72;
 
-// Allways ceil to even number of Brick Units
+// Always ceil to even number of Brick Units. If the ceiled value for [ ([Bottle_Diameter] + 2*[Wall_Strength] + [Space_between_Columns]) / [Size_of_a_BrickUnit] ] resolves into an odd number, you can force the script to ceil to next even number of units. the Extra Space will be added to the [Space_between_Columns] value!
 Even_number_of_BrickUnits = true;
 
-/*[Validation Settings]*/
-// Check if parameters are plausible
-Do_Validation = true;
-
-// Check if parameters match printer settings
-Do_3D_Printer_Validation = true;
-
-// Used for validation, as values that are related to height, should be match
-Planned_3D_Layer_Height = 0.4;
-
-// Width of 3d printer bed
-Width_of_3d_printer_bed = 210;
-
-// Depth of 3d printer bed
-Depth_of_3d_printer_bed = 210;
-
-// Max Printable Hight 
-Max_Printable_Hight = 200;
-
-
-
 /*[Single Bottle Holder Settings]*/
-// Diameter of a bottle
-Bottle_Diameter = 27;
-//30mm tattoobottle
-//35mm NoName
-//37mm Idee
-//25mm valjero
+// Value that will be added to the [Bottle_Diameter] to ensure that the bottles can be inserted and removed quite smoothly. MIGHT BE NEGATIVE IF YOU WANT THEM TO BE SQUEEZED.
+Bottle_Clearance = 1;
 
-// Strength for the walls of the bottle holder
+// Bottle Type, used to preset some [values]
+Bottle_Type="v"; // [ud:User Defined, v:Valjero Paint(25mm), gb26:Generic 26mm Bottle, gb30:Generic 30mm Bottle, gb32:Generic 32mm Bottle, gb35:Generic 35mm Bottle, gb37:Generic 37mm Bottle]
+
+// User definded diameter of a bottle. ONLY USED IF [Bottle Type] equals "User Defined"! Ensure that you do not include a clearance twice!
+UserDefinded_Bottle_Diameter = 15;
+
+//determied by previous selections - not visible in Customizer!
+Bottle_Diameter = GetBottleDiameter(Bottle_Type,UserDefinded_Bottle_Diameter);
+
+// Strength used for the wall of the bottle holder
 Wall_Strength = 1.5;
-// Height for the walls of the bottle holder
+
+// Height used for the wall of the bottle holder
 Wall_Height = 15;
 
 /*[Tile Settings]*/
@@ -74,19 +62,10 @@ Num_of_Rows = 1;
 // Height between Levels
 Height_between_Levels = 10;
 
-
-
-
 //////////////////////////////
 // !!! No changes below !!! //
 //////////////////////////////
-if($preview)
-{
 
-}
-
-
-include <01_Functions.scad>
 ///////////////////////
 // Value Calculation //
 ///////////////////////
@@ -98,9 +77,6 @@ minSpaceBetweenColumns = (Bottle_Diameter + Wall_Strength) - Size_of_Tile;
 
 tileDepth = CalcRealSize(Size_of_Tile,Size_of_a_BrickUnit,Even_number_of_BrickUnits);
 tileDepthOverhead = tileDepth - Size_of_Tile;
-
-
-
 
 
 
@@ -136,12 +112,21 @@ if($preview)
 }
 
 ///////////////////////////
-unitsWidth= BaseSizeWidth / Size_of_a_BrickUnit;
-unitsDepth= tileDepth / Size_of_a_BrickUnit;
+unitsWidth = BaseSizeWidth / Size_of_a_BrickUnit;
+unitsDepth = tileDepth / Size_of_a_BrickUnit;
 ///////////////////////////
 
 if($preview)
 {
+  echo("");
+  echo("----------------------------");
+  echo("Settings for a bottle:");
+  echo("");
+  echo(str("[Bottle Diameter] for [Bottle_Type]: ",Bottle_Type, " have been set to: ", Bottle_Diameter,"mm based on user preferences"));
+  echo("");
+  echo("----------------------------");
+  echo("");
+
   echo("");
   echo("----------------------------");
   echo("Messures of a brick:");

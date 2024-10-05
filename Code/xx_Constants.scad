@@ -14,6 +14,12 @@
 
 
 /*[Hidden]*/
+///////////////////////
+///////////////////////
+//// Brick Related ////
+///////////////////////
+///////////////////////
+
 // as found in Wiki
 SmallHeight_of_a_Brick = 3.2; 
 
@@ -66,3 +72,19 @@ InnerRadius_of_a_BrickHole = Radius_of_a_BrickHead + 0.2;
 
 // Size of a brickhead increased the strength of inner walls
 OutterRadius_of_a_BrickHole = Radius_of_a_BrickHead + InnerWallStrength_of_a_Brick;
+
+////////////////////////
+////////////////////////
+//// Bottle Related ////
+////////////////////////
+////////////////////////
+
+////////////////////
+// Bottle_presets //
+////////////////////
+_v_diameter = 25;
+_gb26_diameter = 26;
+_gb30_diameter = 30;
+_gb32_diameter = 32;
+_gb35_diameter = 35;
+_gb37_diameter = 37;
