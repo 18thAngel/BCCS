@@ -16,11 +16,13 @@ Num_Of_Fragments_DebugMode = 12;
 Num_Of_Fragments_ProductMode = 72;
 
 /*[Brick Settings]*/
-// [Width] (X-Coordinate) of the brick in brick units.
+// [Width] (X-Coordinate) of the brick in brick units. Must be positive, not decimal, not zero value.
 BrickWidth = 4;
-// [Depth] (Y-Coordinate) of the brick in brick units.
+// [Depth] (Y-Coordinate) of the brick in brick units. Must be positive, not decimal, not zero value.
 BrickDepth = 4;
+// [HeightLayers used for the Base] before adding the angle. Must be positive, not decimal, not zero value.
+HeightLayers=1;
 
-// Thickness used for the [Thickness:Z] of the tile base. For Historical Reasons!
-Thickness_of_tile_base = SmallHeight_of_a_Brick;
-Base(BrickWidth,BrickDepth);
+translate([-GetSizeByBrickUnits(BrickWidth)/2 - Radius_of_a_BrickHead,-GetSizeByBrickUnits(BrickDepth)/2,0]) 
+
+Base(BrickWidth,BrickDepth, HeightLayers,true);

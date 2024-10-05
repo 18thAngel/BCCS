@@ -23,12 +23,12 @@ function NotZero(number) = number == 0 ? 1: number;
 /////////////
 
 //generates a base by given values
-module Base(unitsWidth,unitsDepth) {
+module Base(unitsWidth=4,unitsDepth=2,layersHeight=1,addHeads=false) {
   _width = GetSizeByBrickUnits(unitsWidth, Size_of_a_BrickUnit);
   _depth = GetSizeByBrickUnits(unitsDepth, Size_of_a_BrickUnit);
-  
+  _height = layersHeight * SmallHeight_of_a_Brick;
   difference() {
-    cube([ _width, _depth, Thickness_of_tile_base ]);
+    cube([ _width, _depth, _height ]);
     translate([
       OutterWallStrength_of_a_Brick, OutterWallStrength_of_a_Brick, -
       TopWallStrength_of_a_Brick
@@ -36,23 +36,34 @@ module Base(unitsWidth,unitsDepth) {
         cube([
           _width - 2 * OutterWallStrength_of_a_Brick,
           _depth - 2 * OutterWallStrength_of_a_Brick,
-          Thickness_of_tile_base
+          _height
         ]);
   }
+  color("red") 
   for (row = [1:1:unitsDepth - 1]) {
     for (col = [1:1:unitsWidth - 1]) {
-      translate([ Size_of_a_BrickUnit * col, Size_of_a_BrickUnit * row, 0 ])
-          SingleBrickInlay();
+        _x = Size_of_a_BrickUnit * col - Clearance_of_a_Brick/2;
+        _y = Size_of_a_BrickUnit * row - Clearance_of_a_Brick/2;
+        translate([_x, _y, 0 ])
+        {
+            SingleBrickInlay();
+            if(addHeads)
+            {
+                translate([0, 0, _height])
+                    cylinder(Height_of_a_BrickHead,Diameter_of_a_BrickHead/2,Diameter_of_a_BrickHead/2);
+            }
+        }
     }
   }
 }
 
-module SingleBrickInlay() {
 
+module SingleBrickInlay(layersHeight=1) {
+   _height = layersHeight * SmallHeight_of_a_Brick;
   difference() {
-    cylinder(Thickness_of_tile_base - TopWallStrength_of_a_Brick,
+    cylinder(_height - TopWallStrength_of_a_Brick,
              OutterRadius_of_a_BrickHole, OutterRadius_of_a_BrickHole);
-    cylinder(Thickness_of_tile_base - TopWallStrength_of_a_Brick,
+    cylinder(_height - TopWallStrength_of_a_Brick,
              InnerRadius_of_a_BrickHole, InnerRadius_of_a_BrickHole);
   }
 }
