@@ -23,6 +23,7 @@ function CalcTanslationAfterRotation(point, angle) = [
     - (point[1] * cos(angle) - point[2] * sin(angle)),
     (point[2]- (point[1] * sin(angle) + point[2] * cos(angle)))
 ];
+
 // Calc the translation of a point after it has been rotated
 function CalcPositionAfterRotation(point, angle) = [
     point[0],
@@ -33,6 +34,24 @@ function CalcPositionAfterRotation(point, angle) = [
 /////////////
 // Modules //
 /////////////
+module AddHeads(unitsWidth=4,unitsDepth=2,layersHeight=1) {
+  _width = GetSizeByBrickUnits(unitsWidth, Size_of_a_BrickUnit);
+  _depth = GetSizeByBrickUnits(unitsDepth, Size_of_a_BrickUnit);
+  _height = layersHeight * SmallHeight_of_a_Brick;
+  for (row = [1:1:unitsDepth ]) {
+    for (col = [1:1:unitsWidth ]) {
+        _x = (Size_of_a_BrickUnit/2 * col ) - Clearance_of_a_Brick/2;
+        _y = (Size_of_a_BrickUnit/2 * row ) - Clearance_of_a_Brick/2;
+        translate([_x, _y, 0 ])
+        {
+              _headX= _x - Size_of_a_BrickUnit / 2;
+              _headY= _y - Size_of_a_BrickUnit / 2;
+              translate([_headX, _headY, _height])
+                cylinder(Height_of_a_BrickHead,Diameter_of_a_BrickHead/2,Diameter_of_a_BrickHead/2);
+         }
+    }
+  }
+}
 
 //generates a base by given values
 module Base(unitsWidth=4,unitsDepth=2,layersHeight=1,addHeads=false) {
@@ -51,6 +70,7 @@ module Base(unitsWidth=4,unitsDepth=2,layersHeight=1,addHeads=false) {
           _height
         ]);
   }
+
   color("red") 
   for (row = [1:1:unitsDepth - 1]) {
     for (col = [1:1:unitsWidth - 1]) {
@@ -58,15 +78,12 @@ module Base(unitsWidth=4,unitsDepth=2,layersHeight=1,addHeads=false) {
         _y = Size_of_a_BrickUnit * row - Clearance_of_a_Brick/2;
         translate([_x, _y, 0 ])
         {
-            SingleBrickInlay();
-            if(addHeads)
-            {
-                translate([0, 0, _height])
-                    cylinder(Height_of_a_BrickHead,Diameter_of_a_BrickHead/2,Diameter_of_a_BrickHead/2);
-            }
+          SingleBrickInlay();
         }
     }
   }
+  if(addHeads)
+    AddHeads(unitsWidth,unitsDepth,layersHeight);
 }
 
 
