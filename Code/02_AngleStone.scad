@@ -23,6 +23,15 @@ BrickDepth = 4;
 // [HeightLayers used for the Base] before adding the angle. Must be positive, not decimal, not zero value.
 HeightLayers=1;
 
-translate([-GetSizeByBrickUnits(BrickWidth)/2 - Radius_of_a_BrickHead,-GetSizeByBrickUnits(BrickDepth)/2,0]) 
-
+Angle=30;
 Base(BrickWidth,BrickDepth, HeightLayers,true);
+
+bla= CalcTanslationAfterRotation(SmallHeight_of_a_Brick * HeightLayers,Angle);
+echo(bla);
+translate(bla)
+rotate([Angle,0,0])
+Base(BrickWidth,BrickDepth, HeightLayers,true);
+
+/*rotate([0,45,0]) 
+
+    Base(BrickWidth,BrickDepth, HeightLayers,true);*/

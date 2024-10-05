@@ -17,6 +17,12 @@ function GetSizeByBrickUnits(numOfUnits, unitSize = 8) = CalcRealSize(numOfUnits
 // simple prevent function for div by 0. obsolete, technicaly wrong!
 function NotZero(number) = number == 0 ? 1: number;
 
+// 
+function CalcTanslationAfterRotation(z, angle) = [
+     0,
+     z * sin(angle),
+    z- z * cos(angle)
+];
 
 /////////////
 // Modules //
