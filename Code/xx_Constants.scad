@@ -59,7 +59,7 @@ OutterWallStrength_of_a_Brick = (Size_of_a_BrickUnit - Clearance_of_a_Brick - Di
 
 // For better fitting, the total [Width] and [Depth] of a brick will be lowered by 0.2 mm
 // that helps to stack those bricks, or tear them apart
-Width_of_a_Brick = Size_of_a_BrickUnit - 0.2;
+Width_of_a_Brick = Size_of_a_BrickUnit - Clearance_of_a_Brick;
 
 // Simple Diameter => Radius calc
 Radius_of_a_BrickHead = Diameter_of_a_BrickHead / 2;
@@ -88,3 +88,15 @@ _gb30_diameter = 30;
 _gb32_diameter = 32;
 _gb35_diameter = 35;
 _gb37_diameter = 37;
+
+
+// Not a const, i know! 
+// returns the Diameter for the given string
+function GetBottleDiameter(bottleType,userDefindedBottleDiameter) = 
+  bottleType=="v" ? _v_diameter
+: bottleType=="gb26" ? _gb26_diameter
+: bottleType=="gb30" ? _gb30_diameter
+: bottleType=="gb32" ? _gb32_diameter
+: bottleType=="gb35" ? _gb35_diameter
+: bottleType=="gb37" ? _gb37_diameter
+:userDefindedBottleDiameter;

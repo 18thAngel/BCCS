@@ -97,8 +97,8 @@ CalcedSpaceBetween =
     Space_between_Columns + (BaseSizeWidth_overhead / NotZero(Num_of_Columns));
 
 ///////////////////////////
-unitsWidth = BaseSizeWidth / Size_of_a_BrickUnit;
-unitsDepth = tileDepth / Size_of_a_BrickUnit;
+unitsWidth = (BaseSizeWidth + Clearance_of_a_Brick) / Size_of_a_BrickUnit;
+unitsDepth = (tileDepth+Clearance_of_a_Brick) / Size_of_a_BrickUnit;
 ///////////////////////////
 
 if ($preview) {
@@ -185,53 +185,20 @@ module BottleHolders() {
   }
 }
 
-module Base() {
-  difference() {
-    cube([ BaseSizeWidth, tileDepth, Thickness_of_tile_base ]);
-    translate([
-      OutterWallStrength_of_a_Brick, OutterWallStrength_of_a_Brick, -
-      TopWallStrength_of_a_Brick
-    ])
-        cube([
-          BaseSizeWidth - 2 * OutterWallStrength_of_a_Brick,
-          tileDepth - 2 * OutterWallStrength_of_a_Brick,
-          Thickness_of_tile_base
-        ]);
-  }
-  for (row = [1:1:unitsDepth - 1]) {
-    for (col = [1:1:unitsWidth - 1]) {
-      translate([ Size_of_a_BrickUnit * col, Size_of_a_BrickUnit * row, 0 ])
-          SingleBrickInlay();
-    }
-  }
-}
-
-module Brick() {
-  cube([ Width_of_a_Brick, Width_of_a_Brick, Height_of_a_Brick ]);
-  translate([ Width_of_a_Brick / 2, Width_of_a_Brick / 2, Height_of_a_Brick ])
-      cylinder(Height_of_a_BrickHead, Diameter_of_a_BrickHead / 2,
-               Diameter_of_a_BrickHead / 2);
-}
-
+// Generates a Single Row, in original version there were a multiple rows option!
 module SolidHolder() {
   Base();
   translate([ CalcedSpaceBetween / 2, 0, 0 ]) BottleHolders();
 }
 
-module SingleBrickInlay() {
 
-  difference() {
-    cylinder(Thickness_of_tile_base - TopWallStrength_of_a_Brick,
-             OutterRadius_of_a_BrickHole, OutterRadius_of_a_BrickHole);
-    cylinder(Thickness_of_tile_base - TopWallStrength_of_a_Brick,
-             InnerRadius_of_a_BrickHole, InnerRadius_of_a_BrickHole);
-  }
-}
 
 /////////////////
 
 /////////////
 // Program //
 /////////////
+
+// in original version there were a multiple rows option!
 SolidHolder();  
 
