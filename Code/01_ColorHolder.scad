@@ -51,8 +51,6 @@ Num_of_Columns = 5;
 Space_between_Columns = 1;
 
 
-
-
 //////////////////////////////
 // !!! No changes below !!! //
 //////////////////////////////
@@ -67,8 +65,6 @@ $fn = $preview ? Num_Of_Fragments_DebugMode : Num_Of_Fragments_ProductMode;
 // Tile Related
 // Size that is used for [Length:X] and [Depth:Y] of the tile
 Size_of_Tile = Bottle_Diameter + 2 * Wall_Strength;
-// Thickness used for the [Thickness:Z] of the tile base
-Thickness_of_tile_base = SmallHeight_of_a_Brick;
 
 minSpaceBetweenColumns = (Bottle_Diameter + Wall_Strength) - Size_of_Tile;
 
@@ -79,7 +75,8 @@ tileDepthOverhead = tileDepth - Size_of_Tile;
 ///////////////////////
 // Value Calculation //
 ///////////////////////
-
+// Thickness used for the [Thickness:Z] of the tile base. For Historical Reasons!
+Thickness_of_tile_base = SmallHeight_of_a_Brick;
 // Bottle related
 BottleHolder_OutterRadius = Bottle_Diameter / 2 + Wall_Strength;
 BottleHolder_InnerRadius = Bottle_Diameter / 2;
@@ -162,7 +159,7 @@ if ($preview) {
   echo(str("The real tile depth for ", Size_of_Tile,
            "mm has been calced to: ", tileDepth, "mm"));
 }
-
+// generates a single Holder
 module BottleHolder() {
   translate([ 0, BottleHolder_OutterRadius + tileDepthOverhead / 2, 0 ]) {
     difference() {
@@ -173,7 +170,7 @@ module BottleHolder() {
     }
   }
 }
-
+// generates a single Holder
 module BottleHolders() {
   for (holder = [0:Num_of_Columns - 1]) {
     translate([
@@ -187,7 +184,7 @@ module BottleHolders() {
 
 // Generates a Single Row, in original version there were a multiple rows option!
 module SolidHolder() {
-  Base();
+  Base(unitsWidth,unitsDepth);
   translate([ CalcedSpaceBetween / 2, 0, 0 ]) BottleHolders();
 }
 

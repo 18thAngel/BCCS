@@ -8,25 +8,34 @@
 ///////////////
 // Functions //
 ///////////////
+// Calculates the real val for [Width] and [Depth] to ensure the compatiblity to brick systems, by a given size
 function CalcRealSize(currentSize, unitSize = 8, roundToEven = false) = ((ceil(currentSize/unitSize) + (roundToEven?( ceil(currentSize/unitSize)%2 ):0)) * unitSize) - Clearance_of_a_Brick;
+
+// Calculates the real val for [Width] and [Depth] to ensure the compatiblity to brick systems, by a given amount of units
+function GetSizeByBrickUnits(numOfUnits, unitSize = 8) = CalcRealSize(numOfUnits * unitSize, unitSize, false);
+
+// simple prevent function for div by 0. obsolete, technicaly wrong!
 function NotZero(number) = number == 0 ? 1: number;
-//[ud:User Defined, v:Valjero Paint(25mm), gb26:Generic 26mm Bottle, gb30:Generic 30mm Bottle, gb32:Generic 32mm Bottle, gb35:Generic 35mm Bottle, gb37:Generic 37mm Bottle]
-function GetBottleDiameter(bottleType,userDefindedBottleDiameter) = bottleType=="v" ? _v_diameter: bottleType=="gb26" ? _gb26_diameter:bottleType=="gb30" ? _gb30_diameter:bottleType=="gb32" ? _gb32_diameter:bottleType=="gb35" ? _gb35_diameter:bottleType=="gb37" ? _gb37_diameter:userDefindedBottleDiameter;
+
 
 /////////////
 // Modules //
 /////////////
 
-module Base() {
+//generates a base by given values
+module Base(unitsWidth,unitsDepth) {
+  _width = GetSizeByBrickUnits(unitsWidth, Size_of_a_BrickUnit);
+  _depth = GetSizeByBrickUnits(unitsDepth, Size_of_a_BrickUnit);
+  
   difference() {
-    cube([ BaseSizeWidth, tileDepth, Thickness_of_tile_base ]);
+    cube([ _width, _depth, Thickness_of_tile_base ]);
     translate([
       OutterWallStrength_of_a_Brick, OutterWallStrength_of_a_Brick, -
       TopWallStrength_of_a_Brick
     ])
         cube([
-          BaseSizeWidth - 2 * OutterWallStrength_of_a_Brick,
-          tileDepth - 2 * OutterWallStrength_of_a_Brick,
+          _width - 2 * OutterWallStrength_of_a_Brick,
+          _depth - 2 * OutterWallStrength_of_a_Brick,
           Thickness_of_tile_base
         ]);
   }

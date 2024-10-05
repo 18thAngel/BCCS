@@ -73,6 +73,9 @@ InnerRadius_of_a_BrickHole = Radius_of_a_BrickHead + 0.2;
 // Size of a brickhead increased the strength of inner walls
 OutterRadius_of_a_BrickHole = Radius_of_a_BrickHead + InnerWallStrength_of_a_Brick;
 
+// Thickness used for the [Thickness:Z] of the tile base. For Historical Reasons!
+Thickness_of_tile_base = SmallHeight_of_a_Brick;
+
 ////////////////////////
 ////////////////////////
 //// Bottle Related ////
