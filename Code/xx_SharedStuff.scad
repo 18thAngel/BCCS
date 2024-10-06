@@ -64,7 +64,7 @@ module AddInfill(unitsWidth = 4, unitsDepth = 2, layersHeight = 1) {
     for (col = [1:1:unitsWidth - 1]) {
       _x = Size_of_a_BrickUnit * col - Clearance_of_a_Brick / 2;
       _y = Size_of_a_BrickUnit * row - Clearance_of_a_Brick / 2;
-      translate([ _x, _y, 0 ]) { SingleBrickInlay(); }
+      translate([ _x, _y, 0 ]) { SingleBrickInlay(layersHeight); }
     }
   }
 }
@@ -96,8 +96,14 @@ module Base(unitsWidth = 4, unitsDepth = 2, layersHeight = 1, addHeads = false,
         for (col = [1:1:unitsWidth - 1]) {
           _x = Size_of_a_BrickUnit * col - Clearance_of_a_Brick / 2;
           _y = Size_of_a_BrickUnit * row - Clearance_of_a_Brick / 2;
-          translate([ _x, _y, 0 ]) { SingleBrickInlay(); }
+          translate([ _x, _y, 0 ]) { SingleBrickInlay(layersHeight); }
         }
+      }
+      // Adding a bottom plate
+      if(layersHeight > 3)
+      {
+        translate([0,0,3 * SmallHeight_of_a_Brick]) 
+        cube([ _width, _depth, 1 ]);
       }
     }
   }
