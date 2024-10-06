@@ -54,7 +54,7 @@ module AddHeads(unitsWidth=4,unitsDepth=2,layersHeight=1) {
 }
 
 //generates a base by given values
-module Base(unitsWidth=4,unitsDepth=2,layersHeight=1,addHeads=false) {
+module Base(unitsWidth=4,unitsDepth=2,layersHeight=1,addHeads=false, addInfill=true) {
   _width = GetSizeByBrickUnits(unitsWidth, Size_of_a_BrickUnit);
   _depth = GetSizeByBrickUnits(unitsDepth, Size_of_a_BrickUnit);
   _height = layersHeight * SmallHeight_of_a_Brick;

@@ -15,6 +15,8 @@ Num_Of_Fragments_DebugMode = 12;
 // Used for print version, more fragments resolve in LONGER rendering time but smother curves
 Num_Of_Fragments_ProductMode = 72;
 
+// Shows additional elements, like position points or additional Outputs in console! Those objects will not ne there in final Object!
+Show_Debug_output_and_objects = true;
 /*[Brick Settings]*/
 // [Width] (X-Coordinate) of the brick in brick units. Must be positive, not decimal, not zero value.
 BrickWidth = 2;
@@ -24,6 +26,15 @@ BrickDepth = 4;
 HeightLayers = 1;
 
 Angle = 40;
+
+//////////////////////////////
+// !!! No changes below !!! //
+//////////////////////////////
+include <xx_lateCalculatedValues.scad>
+///////////////////////
+// Value Calculation //
+///////////////////////
+
 // General
 $fn = $preview ? Num_Of_Fragments_DebugMode : Num_Of_Fragments_ProductMode;
 
@@ -59,7 +70,7 @@ module GapFill() {
 hull() {
    polyhedron( _fillPoints, _fillFaces );
 }
-    if($preview)
+    if(DebugMode)
         for(point = _fillPoints)
             color("red",0.3) 
               translate(point)     
@@ -112,7 +123,7 @@ module BuildTheCutter() {
   [6,7,3,2],  // back
   [7,4,0,3]]; // left
     
-    if($preview)
+    if($DebugMode)
         for(point = _cutterPoints)
             color("blue",0.5) 
               translate(point)     

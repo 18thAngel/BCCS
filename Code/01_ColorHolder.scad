@@ -24,6 +24,9 @@ Num_Of_Fragments_ProductMode = 72;
 // Always ceil to even number of Brick Units. If the ceiled value for [ ([Bottle_Diameter] + 2*[Wall_Strength] + [Space_between_Columns]) / [Size_of_a_BrickUnit] ] resolves into an odd number, you can force the script to ceil to next even number of units. the Extra Space will be added to the [Space_between_Columns] value!
 Even_number_of_BrickUnits = true;
 
+// Shows additional elements, like position points or additional Outputs in console! Those objects will not ne there in final Object!
+Show_Debug_output_and_objects = true;
+
 /*[Single Bottle Holder Settings]*/
 // Value that will be added to the [Bottle_Diameter] to ensure that the bottles can be inserted and removed quite smoothly. MIGHT BE NEGATIVE IF YOU WANT THEM TO BE SQUEEZED.
 Bottle_Clearance = 1;
@@ -54,7 +57,7 @@ Space_between_Columns = 1;
 //////////////////////////////
 // !!! No changes below !!! //
 //////////////////////////////
-
+include <xx_lateCalculatedValues.scad>
 ///////////////////////
 // Value Calculation //
 ///////////////////////
@@ -75,8 +78,7 @@ tileDepthOverhead = tileDepth - Size_of_Tile;
 ///////////////////////
 // Value Calculation //
 ///////////////////////
-// Thickness used for the [Thickness:Z] of the tile base. For Historical Reasons!
-Thickness_of_tile_base = SmallHeight_of_a_Brick;
+
 // Bottle related
 BottleHolder_OutterRadius = Bottle_Diameter / 2 + Wall_Strength;
 BottleHolder_InnerRadius = Bottle_Diameter / 2;
@@ -98,7 +100,7 @@ unitsWidth = (BaseSizeWidth + Clearance_of_a_Brick) / Size_of_a_BrickUnit;
 unitsDepth = (tileDepth+Clearance_of_a_Brick) / Size_of_a_BrickUnit;
 ///////////////////////////
 
-if ($preview) {
+if (DebugMode) {
   echo("");
   echo("----------------------------");
   echo("Important calculation results:");
