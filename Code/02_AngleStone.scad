@@ -52,9 +52,9 @@ bottomLocation = CalcPositionAfterRotation([0,0,0], Angle) + correctedPosition;
 module GapFill() {
 
     _fillPoints=[
-     [  0,  bottomLocation[1], bottomLocation[2] ],  //0 
-     [  _origin_x,  bottomLocation[1], bottomLocation[2] ],  //1 
-    [  _origin_x,  _origin_y, _origin_z ],  //2 
+     [  0,  0, _origin_z ],  //0 
+     [  _origin_x,  0, _origin_z ],  //1 
+     [  _origin_x,  _origin_y, _origin_z ],  //2 
      [  0,  _origin_y, _origin_z ],  //3
      [  0,  topLocation[1], topLocation[2] ],  //4 
      [  _origin_x,  topLocation[1], topLocation[2] ],  //5 
@@ -77,15 +77,35 @@ hull() {
                 cube(size = 1, center=true);
 }
 
+module buildTopPart()
+{
+    difference() 
+    {
+        translate(correctedPosition)
+            rotate([Angle,0,0])
+                color("green",0.5) 
+                    Base(BrickWidth,BrickDepth, HeightLayers,true,false);
+    
+        //TODO; lazy way of cutting may be fixed 
+        
+        translate(correctedPosition+[0,0.1,-0.1])
+            rotate([Angle,0,0])
+                color("red",0.5) 
+                    Base(BrickWidth,BrickDepth, HeightLayers,false,false);
+        translate(correctedPosition+[0,-0.1,-0.1])
+            rotate([Angle,0,0])
+                color("red",0.5) 
+                    Base(BrickWidth,BrickDepth, HeightLayers,false,false);
+    }       
+}
+
 module buildTheBasic()
 {
+    buildTopPart();
     color("yellow",0.5) 
     Base(BrickWidth,BrickDepth, HeightLayers,false);
     
-    translate(correctedPosition)
-        rotate([Angle,0,0])
-          color("green",0.5) 
-            Base(BrickWidth,BrickDepth, HeightLayers,true);
+ 
 }
 
 module Brick() {
@@ -123,7 +143,7 @@ module BuildTheCutter() {
   [6,7,3,2],  // back
   [7,4,0,3]]; // left
     
-    if($DebugMode)
+    if(DebugMode)
         for(point = _cutterPoints)
             color("blue",0.5) 
               translate(point)     
@@ -138,3 +158,4 @@ module BuildTheCutter() {
 //   BuildTheCutter();
    //GapFill();
    FinalBrick();
+   //buildTopPart();
