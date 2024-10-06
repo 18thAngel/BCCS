@@ -25,7 +25,7 @@ BrickDepth = 4;
 // [HeightLayers used for the Base] before adding the angle. Must be positive, not decimal, not zero value.
 HeightLayers = 1;
 
-Angle = 40;
+Angle = 30;
 
 //////////////////////////////
 // !!! No changes below !!! //
