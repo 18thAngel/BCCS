@@ -38,6 +38,10 @@ InnerWallStrength_of_a_Brick = 0.85;
 // assumed
 TopWallStrength_of_a_Brick = 1.2;
 
+//TODO: make it a param in customizer!
+// This is just, as my printer is not that precise
+OutterWallStrength_additional_clearance= 0.1;
+
 //////////////////////////
 // Precalculated Values //
 //////////////////////////
@@ -55,11 +59,11 @@ Size_of_a_BrickUnit = SmallHeight_of_a_Brick * 2.5;
 // Value that is used for any outter walls regarding [Width] and [Depth], most likely it could also be used for height
 // Calculation:
 // ([Size of a single brick unit] - [clearance of a brick] - [diameter of a brick head]) / 2
-OutterWallStrength_of_a_Brick = (Size_of_a_BrickUnit - Clearance_of_a_Brick - Diameter_of_a_BrickHead) / 2;
+OutterWallStrength_of_a_Brick = ((Size_of_a_BrickUnit - Clearance_of_a_Brick - Diameter_of_a_BrickHead) / 2)-OutterWallStrength_additional_clearance;
 
 // For better fitting, the total [Width] and [Depth] of a brick will be lowered by 0.2 mm
 // that helps to stack those bricks, or tear them apart
-Width_of_a_Brick = Size_of_a_BrickUnit - 0.2;
+Width_of_a_Brick = Size_of_a_BrickUnit - Clearance_of_a_Brick;
 
 // Simple Diameter => Radius calc
 Radius_of_a_BrickHead = Diameter_of_a_BrickHead / 2;
@@ -72,6 +76,9 @@ InnerRadius_of_a_BrickHole = Radius_of_a_BrickHead + 0.2;
 
 // Size of a brickhead increased the strength of inner walls
 OutterRadius_of_a_BrickHole = Radius_of_a_BrickHead + InnerWallStrength_of_a_Brick;
+
+// Thickness used for the [Thickness:Z] of the tile base. For Historical Reasons!
+Thickness_of_tile_base = SmallHeight_of_a_Brick;
 
 ////////////////////////
 ////////////////////////
@@ -88,3 +95,15 @@ _gb30_diameter = 30;
 _gb32_diameter = 32;
 _gb35_diameter = 35;
 _gb37_diameter = 37;
+
+
+// Not a const, i know! 
+// returns the Diameter for the given string
+function GetBottleDiameter(bottleType,userDefindedBottleDiameter) = 
+  bottleType=="v" ? _v_diameter
+: bottleType=="gb26" ? _gb26_diameter
+: bottleType=="gb30" ? _gb30_diameter
+: bottleType=="gb32" ? _gb32_diameter
+: bottleType=="gb35" ? _gb35_diameter
+: bottleType=="gb37" ? _gb37_diameter
+:userDefindedBottleDiameter;

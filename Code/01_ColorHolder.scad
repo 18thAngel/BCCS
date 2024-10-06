@@ -24,6 +24,9 @@ Num_Of_Fragments_ProductMode = 72;
 // Always ceil to even number of Brick Units. If the ceiled value for [ ([Bottle_Diameter] + 2*[Wall_Strength] + [Space_between_Columns]) / [Size_of_a_BrickUnit] ] resolves into an odd number, you can force the script to ceil to next even number of units. the Extra Space will be added to the [Space_between_Columns] value!
 Even_number_of_BrickUnits = true;
 
+// Shows additional elements, like position points or additional Outputs in console! Those objects will not ne there in final Object!
+Show_Debug_output_and_objects = true;
+
 /*[Single Bottle Holder Settings]*/
 // Value that will be added to the [Bottle_Diameter] to ensure that the bottles can be inserted and removed quite smoothly. MIGHT BE NEGATIVE IF YOU WANT THEM TO BE SQUEEZED.
 Bottle_Clearance = 1;
@@ -51,12 +54,10 @@ Num_of_Columns = 5;
 Space_between_Columns = 1;
 
 
-
-
 //////////////////////////////
 // !!! No changes below !!! //
 //////////////////////////////
-
+include <xx_lateCalculatedValues.scad>
 ///////////////////////
 // Value Calculation //
 ///////////////////////
@@ -67,8 +68,6 @@ $fn = $preview ? Num_Of_Fragments_DebugMode : Num_Of_Fragments_ProductMode;
 // Tile Related
 // Size that is used for [Length:X] and [Depth:Y] of the tile
 Size_of_Tile = Bottle_Diameter + 2 * Wall_Strength;
-// Thickness used for the [Thickness:Z] of the tile base
-Thickness_of_tile_base = SmallHeight_of_a_Brick;
 
 minSpaceBetweenColumns = (Bottle_Diameter + Wall_Strength) - Size_of_Tile;
 
@@ -97,11 +96,11 @@ CalcedSpaceBetween =
     Space_between_Columns + (BaseSizeWidth_overhead / NotZero(Num_of_Columns));
 
 ///////////////////////////
-unitsWidth = BaseSizeWidth / Size_of_a_BrickUnit;
-unitsDepth = tileDepth / Size_of_a_BrickUnit;
+unitsWidth = (BaseSizeWidth + Clearance_of_a_Brick) / Size_of_a_BrickUnit;
+unitsDepth = (tileDepth+Clearance_of_a_Brick) / Size_of_a_BrickUnit;
 ///////////////////////////
 
-if ($preview) {
+if (DebugMode) {
   echo("");
   echo("----------------------------");
   echo("Important calculation results:");
@@ -162,7 +161,7 @@ if ($preview) {
   echo(str("The real tile depth for ", Size_of_Tile,
            "mm has been calced to: ", tileDepth, "mm"));
 }
-
+// generates a single Holder
 module BottleHolder() {
   translate([ 0, BottleHolder_OutterRadius + tileDepthOverhead / 2, 0 ]) {
     difference() {
@@ -173,7 +172,7 @@ module BottleHolder() {
     }
   }
 }
-
+// generates a single Holder
 module BottleHolders() {
   for (holder = [0:Num_of_Columns - 1]) {
     translate([
@@ -185,53 +184,20 @@ module BottleHolders() {
   }
 }
 
-module Base() {
-  difference() {
-    cube([ BaseSizeWidth, tileDepth, Thickness_of_tile_base ]);
-    translate([
-      OutterWallStrength_of_a_Brick, OutterWallStrength_of_a_Brick, -
-      TopWallStrength_of_a_Brick
-    ])
-        cube([
-          BaseSizeWidth - 2 * OutterWallStrength_of_a_Brick,
-          tileDepth - 2 * OutterWallStrength_of_a_Brick,
-          Thickness_of_tile_base
-        ]);
-  }
-  for (row = [1:1:unitsDepth - 1]) {
-    for (col = [1:1:unitsWidth - 1]) {
-      translate([ Size_of_a_BrickUnit * col, Size_of_a_BrickUnit * row, 0 ])
-          SingleBrickInlay();
-    }
-  }
-}
-
-module Brick() {
-  cube([ Width_of_a_Brick, Width_of_a_Brick, Height_of_a_Brick ]);
-  translate([ Width_of_a_Brick / 2, Width_of_a_Brick / 2, Height_of_a_Brick ])
-      cylinder(Height_of_a_BrickHead, Diameter_of_a_BrickHead / 2,
-               Diameter_of_a_BrickHead / 2);
-}
-
+// Generates a Single Row, in original version there were a multiple rows option!
 module SolidHolder() {
-  Base();
+  Base(unitsWidth,unitsDepth);
   translate([ CalcedSpaceBetween / 2, 0, 0 ]) BottleHolders();
 }
 
-module SingleBrickInlay() {
 
-  difference() {
-    cylinder(Thickness_of_tile_base - TopWallStrength_of_a_Brick,
-             OutterRadius_of_a_BrickHole, OutterRadius_of_a_BrickHole);
-    cylinder(Thickness_of_tile_base - TopWallStrength_of_a_Brick,
-             InnerRadius_of_a_BrickHole, InnerRadius_of_a_BrickHole);
-  }
-}
 
 /////////////////
 
 /////////////
 // Program //
 /////////////
+
+// in original version there were a multiple rows option!
 SolidHolder();  
 
