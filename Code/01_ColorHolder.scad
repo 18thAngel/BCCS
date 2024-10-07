@@ -49,8 +49,7 @@ Wall_Height = 15;
 /*[Column Settings]*/
 // Number of [bottles] per [row]
 Num_of_Columns = 5;
-// Space between [bottles] in a [row]. May be negative but only by [real space
-// between bottle holders] + 1 * [Wall Strength]
+// Space between [bottles] in a [row]. May be negative but only by [real space between bottle holders] + 1 * [Wall Strength]
 Space_between_Columns = 1;
 
 
