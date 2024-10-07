@@ -1,5 +1,33 @@
 # BCCS - Brick compatible color shelf
 
+- [BCCS - Brick compatible color shelf](#bccs---brick-compatible-color-shelf)
+  - [What is this project about?](#what-is-this-project-about)
+  - [How did this project come about?](#how-did-this-project-come-about)
+  - [What about the angle bricks?](#what-about-the-angle-bricks)
+  - [How to use](#how-to-use)
+    - [Pre requirements / Used Software](#pre-requirements--used-software)
+    - [Definitions](#definitions)
+    - [General](#general)
+      - [Customizer - General Settings - Section](#customizer---general-settings---section)
+        - [Num Of Fragments](#num-of-fragments)
+          - [Example for preview](#example-for-preview)
+          - [Example for rendered version](#example-for-rendered-version)
+        - [Even number of BrickUnits](#even-number-of-brickunits)
+        - [Show Debug outputs and object](#show-debug-outputs-and-object)
+    - [Color Holder](#color-holder)
+      - [Customizer - Bottle Settings - Section](#customizer---bottle-settings---section)
+        - [Clearance](#clearance)
+        - [Bottle Type / UserDefined Bottle Diameter](#bottle-type--userdefined-bottle-diameter)
+        - [Wall](#wall)
+      - [Customizer - Column Settings - Section](#customizer---column-settings---section)
+        - [Num of Columns](#num-of-columns)
+        - [Space Between Columns](#space-between-columns)
+    - [AngleBrick](#anglebrick)
+      - [General](#general-1)
+  - [Known Issues](#known-issues)
+    - [Bricks are very tight](#bricks-are-very-tight)
+
+
 ## What is this project about?
 
 This project allows the creation and printing of compatible holders for building blocks (like LEGO), making it easier to organize and store things like airbrush or tattoo colors. However, during the project, it actually split into two exciting sub-projects:
@@ -91,6 +119,13 @@ After calculating the needed `[brickUnits]` for the holder, the script will spre
 
 __NOTE / TO DO:__ this value must not be set to a value lower than `-[WallStrength]`!<br/>
 It is planed to implement a check on that in future versions!
+
+### AngleBrick
+#### General
+![](./Documentation/media/img/02_AngleBrick_Settings.png)
+ Settings for the AngleBrick are straight forward and do not need many explanation.
+
+__Only important info__ is, that the `[Angle]` - value may not be lower than 0°or higher than 90°
 
 ## Known Issues
 ### Bricks are very tight
